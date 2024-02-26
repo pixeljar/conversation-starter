@@ -87,7 +87,7 @@ class Changelog {
 	public static function admin_page() {
 
 		add_submenu_page(
-			null,
+			'admin.php',
 			__( 'Conversation Starter Changelog', 'pj-convo' ),
 			__( 'Conversation Starter Changelog', 'pj-convo' ),
 			'manage_options',
