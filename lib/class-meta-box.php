@@ -13,11 +13,6 @@ namespace PJ_Conversation_Starter;
 class Meta_Box {
 
 	/**
-	 * Stub method.
-	 */
-	public function __construct() {}
-
-	/**
 	 * The hooks for this class.
 	 */
 	public static function hooks() {
@@ -37,7 +32,7 @@ class Meta_Box {
 
 		\add_meta_box(
 			'pj_convo_starter_metabox',
-			__( 'Conversation Starter', 'pj-convo' ),
+			__( 'Conversation Starter - Prompt', 'pj-convo' ),
 			[ __CLASS__, 'meta_box_markup' ],
 			'post',
 			'normal',
@@ -59,15 +54,13 @@ class Meta_Box {
 
 		if ( empty( $promptext ) ) {
 
-			global $convo_starter;
-			$promptext = $convo_starter->defaultPromptText(); // "What do you think about this post?";
+			$promptext = \PJ_Conversation_Starter\Helpers::get_default_prompt_text(); // "What do you think about this post?";
 
 		}
 
 		?>
 		<label for="promptext"><?php esc_html_e( 'Use this text to prompt the readers:', 'pj-convo' ); ?></label><br />
 		<textarea rows="5" cols="35" name="promptext" id="promptext"><?php echo esc_textarea( $promptext ); ?></textarea><br />
-
 		<?php
 	}
 
@@ -81,17 +74,17 @@ class Meta_Box {
 	public static function save_meta_data( $post_id, $post ) {
 
 		// Is the user allowed to edit the post or page?
-		if ( isset( $_POST['post_type'] ) && 'page' === $_POST['post_type'] ) {
+		if (
+			isset( $_POST['post_type'] ) && 'page' === sanitize_text_field( wp_unslash( $_POST['post_type'] ) ) &&
+			! current_user_can( 'edit_page', $post_id )
+		) {
 
-			if ( ! current_user_can( 'edit_page', $post_id ) ) {
-				return $post_id;
-			}
+			return $post_id;
 
-		} else {
+		} elseif ( ! current_user_can( 'edit_post', $post_id ) ) {
 
-			if ( ! current_user_can( 'edit_post', $post_id ) ) {
-				return $post_id;
-			}
+			return $post_id;
+
 		}
 
 		$mydata['prompt'] = '';
