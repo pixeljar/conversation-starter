@@ -13,11 +13,6 @@ namespace PJ_Conversation_Starter;
 class Changelog {
 
 	/**
-	 * Stub method.
-	 */
-	public function __construct() {}
-
-	/**
 	 * The transient name
 	 *
 	 * @var $transient_name The name of the transient.
@@ -29,7 +24,7 @@ class Changelog {
 	 *
 	 * @var $page_slug The changelog url slug for the admin.
 	 */
-	private static $page_slug = 'conversation-starter-changelog';
+	public static $page_slug = 'conversation-starter-changelog';
 
 	/**
 	 * The hooks for this class.
@@ -40,6 +35,7 @@ class Changelog {
 			PJ_CONVO_PATH . 'pj-convo.php',
 			[ __CLASS__, 'welcome_transient' ]
 		);
+
 		add_action( 'admin_init', [ __CLASS__, 'welcome_redirect' ] );
 		add_action( 'admin_menu', [ __CLASS__, 'admin_page' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_style' ], 10, 1 );
@@ -76,7 +72,7 @@ class Changelog {
 
 		// Redirect to the changelog.
 		wp_safe_redirect(
-			add_query_arg( 'page', self::$page_slug, admin_url() )
+			add_query_arg( 'page', self::$page_slug, admin_url( 'admin.php' ) )
 		);
 
 	}
@@ -88,8 +84,8 @@ class Changelog {
 
 		add_submenu_page(
 			'admin.php',
-			__( 'Conversation Starter Changelog', 'pj-convo' ),
-			__( 'Conversation Starter Changelog', 'pj-convo' ),
+			'Conversation Starter - ' . __( ' Changelog', 'pj-convo' ),
+			'Conversation Starter - ' . __( ' Changelog', 'pj-convo' ),
 			'manage_options',
 			self::$page_slug,
 			[ __CLASS__, 'render_admin_page' ]
@@ -108,22 +104,21 @@ class Changelog {
 
 	/**
 	 * Enqueue style to changelog page.
-	 *
-	 * @param string $hook The name of the hook.
 	 */
-	public static function enqueue_style( $hook = '' ) {
+	public static function enqueue_style() {
 
-		if ( 'dashboard_page_' . self::$page_slug !== $hook ) {
-			return;
+		$screen = get_current_screen();
+		if ( false !== strpos( $screen->base, 'conversation-starter-changelog' ) ) {
+
+			wp_enqueue_style(
+				'conversation-starter-changelog',
+				PJ_CONVO_ASSETS . 'css/changelog.css',
+				[],
+				PJ_CONVO_VERSION,
+				'all'
+			);
+
 		}
-
-		wp_enqueue_style(
-			'conversation-starter-changelog',
-			PJ_CONVO_ASSETS . 'css/changelog.css',
-			[],
-			PJ_CONVO_VERSION,
-			'all'
-		);
 
 	}
 
@@ -136,7 +131,7 @@ class Changelog {
 
 		$links['changlog'] = sprintf(
 			'<a href="%s" aria-label="%s">%s</a>',
-			add_query_arg( 'page', self::$page_slug, admin_url() ),
+			add_query_arg( 'page', self::$page_slug, admin_url( 'admin.php' ) ),
 			esc_attr__( 'Conversation Starter Changelog', 'pj-convo' ),
 			esc_html__( 'Changelog', 'pj-convo' )
 		);
