@@ -1,10 +1,13 @@
 === Conversation Starter ===
-Contributors: brandondove, jeffreyzinn, STDestiny, vegasgeek, drewstrojny, nateconley
+Contributors: brandondove, jeffreyzinn, STDestiny, vegasgeek, drewstrojny
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9525411
-Tags: conversation, comments
-Requires at least: 4.8
-Tested up to: 5.0.3
-Stable tag: 1.3
+Tags: conversation, blog, comments
+Requires at least: 6.0
+Tested up to: 6.5
+Stable tag: 1.4
+Requires PHP: 7.4
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
@@ -23,7 +26,7 @@ This plugin allows you to prompt your readers to comment by asking them to answe
 
 = I installed the plugin, but nothing happened. =
 
-We didn't want to assume you wanted to prompt your users to say anything on every post, so we only put the prompts on posts where you've specifically entered a prompt. GO into the post edit screen and add prompts for users as you see fit.
+We didn't want to assume you wanted to prompt your users to say anything on every post, so we only put the prompts on posts where you've specifically entered a prompt. Go into the post edit screen and add prompts for users as you see fit.
 
 == Screenshots ==
 

@@ -3,10 +3,15 @@
  * Plugin Name: Conversation Starter
  * Plugin URI: https://www.pixeljar.com/wordpress-plugin-development/conversation-manager/
  * Description: This plugin prompts readers to answer a question in your comments.
- * Author: brandondove, jeffreyzinn, STDestiny, vegasgeek, drewstrojny
  * Version: 1.4
+ * Requires at least: 6.0
+ * Requires PHP: 7.4
+ * Author: Pixel Jar
  * Author URI: https://www.pixeljar.com
+ * License: GPLv2
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: pj-convo
+ * Domain Path: /languages
 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,58 +38,20 @@ define( 'PJ_CONVO_ASSETS', PJ_CONVO_URL . 'assets/' );
 define( 'PJ_CONVO_LIB', PJ_CONVO_PATH . 'lib/' );
 define( 'PJ_CONVO_VERSION', '1.4' );
 
-require_once PJ_CONVO_LIB . 'class-changelog.php';
+/**
+ * Load translations.
+ *
+ * @return void
+ */
+function pj_convo_load_textdomain() {
+
+	load_plugin_textdomain( 'pj-convo', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+
+}
+add_action( 'init', '\PJ_Conversation_Starter\pj_convo_load_textdomain' );
+
+require_once PJ_CONVO_LIB . 'class-helpers.php';
+require_once PJ_CONVO_LIB . 'class-admin.php';
 require_once PJ_CONVO_LIB . 'class-meta-box.php';
 require_once PJ_CONVO_LIB . 'class-frontend.php';
-
-add_action( 'activate_conversation-starter/pj-convo.php', [ &$convo_starter, 'activateMe' ] );
-
-
-/**
- * FRONTEND CSS & JS files
- *
- * @param mixed $wp WordPress.
- */
-function pj_convo_parse_request( $wp ) {
-
-	// Only process requests with "my-plugin=ajax-handler".
-	if (
-		array_key_exists( 'conversation-starter', $wp->query_vars ) &&
-		'frontend_css' === $wp->query_vars['conversation-starter']
-	) {
-
-		include PJ_CONVO_PATH . 'stylesheets/frontend.php';
-		die();
-
-	} elseif (
-		array_key_exists( 'conversation-starter', $wp->query_vars ) &&
-		'frontend_js' === $wp->query_vars['conversation-starter']
-	) {
-
-		include PJ_CONVO_PATH . 'javascripts/frontend.php';
-		die();
-
-	}
-
-}
-add_action( 'wp', 'pj_convo_parse_request' );
-
-/**
- * Registers query variables.
- *
- * @param  array $vars The variables array.
- * @return array
- */
-function pj_convo_query_vars( $vars = [] ) {
-
-	$vars[] = 'conversation-starter';
-	$vars[] = 'convo-id';
-	return $vars;
-
-}
-add_filter( 'query_vars', 'pj_convo_query_vars' );
-
-/**
- * ADMIN Page functionality
- */
-require PJ_CONVO_PATH . 'PluginCore/extend.php';
+require_once PJ_CONVO_LIB . 'class-changelog.php';
